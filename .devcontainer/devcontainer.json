@@ -1,8 +1,8 @@
 {
-	"name": "Node.js & TypeScript",
+	"name": "Tower game server",
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
 	"runArgs": [
-		"--name=tower_game",
+		"--name=tower_game_server",
     	"--rm"
 	],
 	"customizations": {

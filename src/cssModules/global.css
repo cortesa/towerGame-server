@@ -1,0 +1,170 @@
+:root {
+	--color-black: #000000;
+	--color-red: #FF5F5F;
+	--color-red-dark: #331313;
+	--color-orange: #F5901A;
+	--color-orange-dark: #4B351C;
+	--color-yellow: #FFFD5F;
+	--color-yellow-dark: #696800;
+	--color-green: #69FF5C;
+	--color-green-dark: #2D4B2A;
+	--color-blue: #5FA5FF;
+	--color-blue-dark: #132133;
+	--color-pink: #FFB5D4;
+	--color-pink-dark: #331927;
+
+	--color-neutral: #696969;
+	--color-background-light: #3C3C3C;
+	--color-background: #272727;
+	--color-background-dark: #1B1B1B;
+	--color-background-darkest: #121212;
+	--color-text: #FFFFFF;
+	--color-text-dark: #B5B5B5;
+
+	--color-bitcoin: #F7931A;
+	--color-bitcoin-dark: #C96A1A;
+
+	--gradient-spotlight: radial-gradient(
+		circle at center,
+		var(--color-green) 0%,
+		var(--color-orange) 65%,
+		transparent 100%
+	);
+	--gradient-spot-green: radial-gradient(
+		circle at center,
+		var(--color-green) 30%,
+		var(--color-orange) 90%,
+		transparent 100%
+	)
+
+	--font-size-xxs: 10px;
+	--font-size-xs: 12px;
+	--font-size-s: 14px;
+	--font-size-ms: 16px;
+	--font-size-m: 18px;
+	--font-size-ml: 20px;
+	--font-size-l: 24px;
+	--font-size-xl: 32px;
+	--font-size-xxl: 40px;
+
+	--font-size-tinier: 0.67em;
+	--font-size-smaller: 0.8em;
+	--font-size-bigger: 1.2em;
+	--font-size-larger: 1.5em;
+
+	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.25;
+	font-weight: 400;
+
+	color: var(--color-text);
+	background-color: var(--color-background-darkest);
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	user-select: none;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+	display: none;
+}
+
+body {
+	margin: 0;
+	display: flex;
+	place-items: center;
+	min-width: 320px;
+	min-height: 100vh;
+	color: var(--color-text);
+	background-color: var(--color-background-darkest);
+}
+
+*[role=button] {
+	cursor: pointer;
+}
+a {
+	text-decoration: inherit;
+	color: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+	line-height: 1em;
+}
+
+.red {
+	color: var(--color-red);
+}
+.red-dark {
+	color: var(--color-red-dark);
+}
+.orange {
+	color: var(--color-orange);
+}
+.orange-dark {
+	color: var(--color-orange-dark);
+}
+.yellow {
+	color: var(--color-yellow);
+}
+.yellow-dark {
+	color: var(--color-yellow-dark);
+}
+.green {
+	color: var(--color-green);
+}
+.green-dark {
+	color: var(--color-green-dark);
+}
+.blue {
+	color: var(--color-blue);
+}
+.blue-dark {
+	color: var(--color-blue-dark);
+}
+.pink {
+	color: var(--color-pink);
+}
+.pink-dark {
+	color: var(--color-pink-dark);
+}
+.bitcoin {
+	color: var(--color-bitcoin);
+}
+.bitcoin-dark {
+	color: var(--color-bitcoin-dark);
+}
+
+.neutral {
+	color: var(--color-neutral);
+}
+.background-light {
+	color: var(--color-background-light);
+}
+.background {
+	color: var(--color-background);
+}
+.background-dark {
+	color: var(--color-background-dark);
+}
+.background-darkest {
+	color: var(--color-background-darkest);
+}
+.text {
+	color: var(--color-text);
+}
+.text-dark {
+	color: var(--color-text-dark);
+}
+
+.hidden {
+	display: none !important;
+}

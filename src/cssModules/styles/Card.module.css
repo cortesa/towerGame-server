@@ -1,0 +1,39 @@
+.card {
+	padding: 24px;
+	border-radius: 12px;
+	border: 1px solid var(--color-background-light);
+	transition: all 0.3s ease;
+
+	background: var(--color-background);
+}
+
+/* Variants */
+.light {
+	background: var(--color-background-light);
+}
+.dark {
+	background: var(--color-background-dark);
+	border: 1px solid var(--color-background-dark);
+
+}
+.transparent {
+	background: transparent;
+}
+
+.split-top,
+.split-bottom {
+	padding: 0px;
+}
+.split-top > *,
+.split-bottom > * {
+	width: 100%;
+	padding: 24px;
+}
+.split-top > *:first-child {
+	background: var(--color-background);
+	border-radius: 12px 12px 0px 0px;
+}
+.split-top > *:last-child {
+	background: var(--color-background);
+	border-radius: 12px;
+}

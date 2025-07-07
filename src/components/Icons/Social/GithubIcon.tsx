@@ -1,0 +1,17 @@
+import type { IconProps } from "@/types"
+
+export function GithubIcon({ size = 20, ...props }: IconProps) {
+	return (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="5 5 175 175"
+			width={size}
+			height={size}
+			fill="currentColor"
+			{...props}
+			stroke="none">
+			<path d="M 75.111651,160.89257 46.353223,154.70388 13.905967,109.50949 V 69.529835 l 36.213456,-45.4841 26.942811,-7.532399 27.232516,-0.869123 30.2983,11.579712 32.05808,42.744106 v 40.454239 l -34.8568,45.03397 -25.44292,6.1063 z"/>
+			<path d="M 60 10 L 60 20 L 40 20 L 40 30 L 30 30 L 30 40 L 20 40 L 20 60 L 10 60 L 10 120 L 20 120 L 20 140 L 30 140 L 30 150 L 40 150 L 40 160 L 60 160 L 60 170 L 120 170 L 120 160 L 140 160 L 140 150 L 150 150 L 150 140 L 160 140 L 160 120 L 170 120 L 170 60 L 160 60 L 160 40 L 150 40 L 150 30 L 140 30 L 140 20 L 120 20 L 120 10 L 60 10 z M 70 20 L 110 20 L 110 30 L 130 30 L 130 40 L 140 40 L 140 50 L 150 50 L 150 70 L 160 70 L 160 110 L 150 110 L 150 130 L 140 130 L 140 140 L 130 140 L 130 150 L 110 150 L 110 120 L 100 120 L 100 115 L 120 115 L 120 105 L 130 105 L 130 70 L 120 70 L 120 50 L 110 50 L 110 60 L 70 60 L 70 50 L 60 50 L 60 70 L 50 70 L 50 105 L 60 105 L 60 115 L 80 115 L 80 120 L 70 120 L 70 125 L 55 125 L 55 120 L 40 120 L 40 125 L 50 125 L 50 135 L 70 135 L 70 150 L 50 150 L 50 140 L 40 140 L 40 130 L 30 130 L 30 110 L 20 110 L 20 70 L 30 70 L 30 50 L 40 50 L 40 40 L 50 40 L 50 30 L 70 30 L 70 20 z" fill={props.stroke || theme.colors.background} stroke={props.stroke || theme.colors.background} strokeWidth="3"/>
+		</svg>
+	)
+}

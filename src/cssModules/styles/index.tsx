@@ -1,7 +1,0 @@
-export * from "./Button"
-export * from "./Card"
-export * from "./Flex"
-export * from "./Grid"
-export * from "./Highlighted"
-export * from "./Popout"
-export * from "./Text"

@@ -1,6 +1,0 @@
-export * from "./DiscordIcon"
-export * from "./GithubIcon"
-export * from "./MediumIcon"
-export * from "./TelegramIcon"
-export * from "./TwitterIcon"
-export * from "./YoutubeIcon"

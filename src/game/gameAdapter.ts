@@ -1,6 +1,6 @@
 import type { Server, Socket } from "socket.io"
 import type { Game } from "./game"
-import type { Team } from "../types"
+import type { Team } from "@/types"
 
 interface GameRoomAdapterOptions {
 	roomId: string

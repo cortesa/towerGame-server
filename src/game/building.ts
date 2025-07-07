@@ -7,7 +7,7 @@ import type {
 	BuildingLevel,
 	IBuilding,
 	BuildingSerializedState
-} from "../types"
+} from "@/types"
 
 import { calculateLevelFromSoldiers, evaluateUpgradeOption } from "./utils"
 import {

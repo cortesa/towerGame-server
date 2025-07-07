@@ -1,5 +1,5 @@
 import type { Troop } from "./troop"
-import type { BuildingConfig, Hitbox, IBuilding, BuildingSerializedState, TowerState } from "../types"
+import type { BuildingConfig, Hitbox, IBuilding, BuildingSerializedState, TowerState } from "@/types"
 
 import { Building } from "./building"
 import { TOWER_ATTACK_COOLDOWN, TOWER_ATTACK_RANGE } from "./constants"

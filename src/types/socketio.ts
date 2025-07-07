@@ -1,4 +1,4 @@
-import { Team } from "./game/types"
+import { Team } from "./basic"
 
 export type GameCreatePayload = {
 	payload: {

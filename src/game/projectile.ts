@@ -7,7 +7,7 @@ import type {
 	ProjectileState,
 	Team,
 	TowerState
-} from "../types"
+} from "@/types"
 
 import { PROJECTILE_SPEED } from "./constants"
 

@@ -1,4 +1,4 @@
-import type { BuildingLevel } from "../types"
+import type { BuildingLevel } from "@/types"
 
 export const MAX_SOLDIERS_PRODUCTION = 64 //soldiers
 export const UPGRADE_COOLDOWN_TIME = 5 // in seconds

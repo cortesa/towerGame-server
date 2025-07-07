@@ -1,4 +1,4 @@
-import type { IPlayer, ITroop } from "../types"
+import type { IPlayer, ITroop } from "@/types"
 
 export type GameEventMap = {
 	"troop:created": ITroop;

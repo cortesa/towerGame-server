@@ -1,6 +1,6 @@
 import { svgPathProperties } from "svg-path-properties"
 
-import type { Position, Tile } from "../../types"
+import type { Position, Tile } from "@/types"
 
 import { METERS_TO_PX } from "../constants"
 import { toSvgPath } from "../utils"

@@ -1,7 +1,7 @@
 import { type Server, type Socket } from "socket.io"
 import { randomUUID } from "crypto"
 
-import type { GameMap } from "./types"
+import type { GameMap } from "@/types"
 
 import { Game } from "./game/game"
 import { GameAdapter } from "./game/gameAdapter"

@@ -1,4 +1,4 @@
-import type { BuildingConfig, BaseBuildingState } from "../types"
+import type { BuildingConfig, BaseBuildingState } from "@/types"
 
 import { Building } from "./building"
 import { MAX_SOLDIERS_PRODUCTION, SOLDIERS_PRODUCTION_COOLDOWN } from "./constants"

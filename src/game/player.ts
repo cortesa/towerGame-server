@@ -1,4 +1,4 @@
-import type { IPlayer, PlayerState, Team } from "../types"
+import type { IPlayer, PlayerState, Team } from "@/types"
 
 export class Player implements IPlayer {
 	// Unique identifier for the player

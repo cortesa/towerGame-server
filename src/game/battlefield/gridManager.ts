@@ -1,4 +1,4 @@
-import type { Tile } from "../../types"
+import type { Tile } from "@/types"
 
 import { METERS_TO_PX } from "../constants"
 

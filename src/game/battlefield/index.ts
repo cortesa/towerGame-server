@@ -10,7 +10,7 @@ import type {
 	Position,
 	Tile,
 	TilePosition
-} from "../../types"
+} from "@/types"
 import type { EventBus, GameEventMap } from "../eventBus"
 
 import { Barrack } from "../barrack"

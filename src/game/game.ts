@@ -1,4 +1,4 @@
-import type { GameMap, GameState, Team } from "../types"
+import type { GameMap, GameState, Team } from "@/types"
 
 import { EventBus, type GameEventMap } from "./eventBus"
 import { Battlefield } from "./battlefield"

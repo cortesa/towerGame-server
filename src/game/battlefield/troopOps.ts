@@ -1,6 +1,6 @@
 import { svgPathProperties } from "svg-path-properties"
 
-import type { BattlefieldState, IPlayer, Position } from "../../types"
+import type { BattlefieldState, IPlayer, Position } from "@/types"
 
 import { Troop } from "../troop"
 

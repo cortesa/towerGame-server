@@ -1,4 +1,4 @@
-import type { Hitbox, IBuilding, IProjectile, ITroop } from "../types"
+import type { Hitbox, IBuilding, IProjectile, ITroop } from "@/types"
 
 import { intersects } from "./utils"
 

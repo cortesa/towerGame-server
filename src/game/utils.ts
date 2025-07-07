@@ -1,4 +1,4 @@
-import type { BaseBuildingState, BuildingLevel, Hitbox } from "../types"
+import type { BaseBuildingState, BuildingLevel, Hitbox } from "@/types"
 
 import { BUILDING_UPGRADE_THRESHOLDS } from "./constants"
 

@@ -1,6 +1,6 @@
 
 import { checkAndHandleCollision } from "../collision"
-import { BattleEvent, BattlefieldState, Hitbox, IBuilding, IProjectile, ITroop } from "../../types";
+import { BattleEvent, BattlefieldState, Hitbox, IBuilding, IProjectile, ITroop } from "@/types";
 
 export function updateEntities(
 	state: BattlefieldState,

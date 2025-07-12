@@ -48,6 +48,10 @@ export class GameAdapter {
 			callback?.(selected)
 		})
 
+		socket.on("game:resetSelection", () => {
+			this.game.resetSelection(playerId)
+		})
+
 		socket.on("game:sendTroop", (targetId: string) => {
 			console.log("ACZ selected:", targetId)
 			this.game.sendTroops(playerId, targetId)

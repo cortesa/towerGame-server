@@ -23,7 +23,6 @@ export interface BaseBuildingState {
 	team: Team;
 	isUpgrading: boolean;
 	canUpgrade: boolean;
-	selected: boolean;
 	isActive: boolean;
 	hitbox: Hitbox;
 }
@@ -41,7 +40,6 @@ export interface BaseBuildingSerializedState {
 	level: BuildingLevel;
 	soldierCount: number;
 	isActive: boolean;
-	selected: boolean;
 	isUpgrading: boolean;
 	canUpgrade: boolean;
 }
@@ -59,9 +57,6 @@ export interface IBuilding<State extends BaseBuildingState = BaseBuildingState> 
 	serialize(): BuildingSerializedState;
 	update(deltaTime: number, ...args: unknown[]): void;
 	updateSoldierCount(soldierCount: number): void;
-	select(team: Team): void;
-	deselect(team: Team): void;
-	toggleSelection(team: Team): void;
 	startUpgrade(playerTeam: Team): void;
 	onTroopArrival(attackingTeam: Team, attackingSoldiers: number): TroopArrivalOutcome;
 }

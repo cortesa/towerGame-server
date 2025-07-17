@@ -1,5 +1,5 @@
 const INITIAL_TICK = 0
-const INITIAL_TPS = 60
+const INITIAL_TPS = 25
 
 export class Ticker {
 	// Timestamp of the last update (in milliseconds)
@@ -13,6 +13,7 @@ export class Ticker {
 
 	// Number of ticks that have occurred since start
 	private tick = INITIAL_TICK
+	private dt = 0
 
 	// Target ticks per second
 	private tps = INITIAL_TPS
@@ -77,7 +78,10 @@ export class Ticker {
 	 * Returns the current tick count.
 	 */
 	public getTick() {
-		return this.tick
+		return {
+			tick: this.tick,
+			deltaTime: this.dt
+		}
 	}
 
 	private _tick = () => {
@@ -88,6 +92,7 @@ export class Ticker {
 
 		this.lastTime = now
 		this.tick += 1
+		this.dt = dt
 		if (this.callback) {
 			this.callback(dt)
 		}

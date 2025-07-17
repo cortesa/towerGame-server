@@ -80,7 +80,6 @@ export abstract class Building<
 			team,
 			isUpgrading: false,
 			canUpgrade: false,
-			selected: false,
 			isActive: false,
 			hitbox: {
 				x: (config.x ?? 0) - (METERS_TO_PX / 2),
@@ -173,7 +172,6 @@ export abstract class Building<
 			level: this.readState("level"),
 			soldierCount: this.readState("soldierCount"),
 			isActive: this.readState("isActive"),
-			selected: this.readState("selected"),
 			isUpgrading: this.readState("isUpgrading"),
 			canUpgrade: this.readState("canUpgrade")
 		}
@@ -187,41 +185,6 @@ export abstract class Building<
 		this.setState({ soldierCount } as Partial<BuildingState>)
 	}
 
-	/**
-	 * Determines if the building can be selected by the given team.
-	 * @param team Team attempting selection.
-	 * @returns True if selectable by the team, false otherwise.
-	 */
-	protected isSelectableBy(team: Team): boolean {
-		return this.state.team !== "neutral" && this.state.team === team
-	}
-
-	/**
-	 * Selects the building if the team is allowed to do so.
-	 * @param team Team attempting selection.
-	 */
-	public select(team: Team) {
-		if (!this.isSelectableBy(team)) return
-		this.setState({ selected: true } as Partial<BuildingState>)
-	}
-
-	/**
-	 * Deselects the building if the team is allowed to do so.
-	 * @param team Team attempting deselection.
-	 */
-	public deselect(team: Team) {
-		if (!this.isSelectableBy(team)) return
-		this.setState({ selected: false } as Partial<BuildingState>)
-	}
-
-	/**
-	 * Toggles the selection state of the building if the team is allowed to do so.
-	 * @param team Team attempting to toggle selection.
-	 */
-	public toggleSelection(team: Team) {
-		if (!this.isSelectableBy(team)) return
-		this.setState({ selected: !this.readState("selected") } as Partial<BuildingState>)
-	}
 
 	/**
 	 * Initiates the upgrade process if the building belongs to the given team and meets the requirements.
@@ -229,11 +192,11 @@ export abstract class Building<
 	 * @param playerTeam The team attempting to upgrade this building.
 	 */
 	public startUpgrade(playerTeam: Team) {
-		if (!this.isSelectableBy(playerTeam)) return
+		const buildingTeam = this.readState("team")
 		const level = this.readState("level")
 		const canUpgrade = this.readState("canUpgrade")
 
-		if (!canUpgrade || level === 3) return
+		if (buildingTeam !== playerTeam || !canUpgrade || level === 3) return
 
 		this.setState({
 			soldierCount: this.readState("soldierCount") - BUILDING_UPGRADE_THRESHOLDS[ level ],

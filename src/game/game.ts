@@ -17,8 +17,6 @@ export class Game {
 		gameResult: { status: "waiting" }
 	}
 
-	private selectedOrigins: Map<string, string | null> = new Map()
-
 	private listeners: Set<() => void> = new Set()
 
 	private eventBus = new EventBus<GameEventMap>()
@@ -80,7 +78,6 @@ export class Game {
 		const player = new Player(name, team)
 		this.state.players.set(player.id, player)
 		this.state.battlefield.addPlayer(player)
-		this.selectedOrigins.set(player.id, null)
 		this.notifyUpdate()
 
 		if (this.readState("players").size === this.state.mapPlayers) {
@@ -99,7 +96,6 @@ export class Game {
 		if (!player) return
 		// this.state.battlefield.removePlayer(player)
 		this.state.players.delete(id)
-		this.selectedOrigins.delete(id)
 		this.notifyUpdate()
 	}
 
@@ -152,48 +148,17 @@ export class Game {
 		}
 	}
 
-	// Deselects all buildings and clears the selected origin for a player
-	public resetSelection(playerId: string): void {
-		this.state.battlefield.deselectAllByPlayer(playerId)
-		this.selectedOrigins.set(playerId, null)
-	}
-
-	// Selects a building as the origin for troop dispatch for a player
-	public selectOrigin(playerId: string, buildingId: string): boolean {
-		this.resetSelection(playerId)
-
-		const building = this.state.battlefield.getBuildingById(buildingId)
-		if (!building) return false
-
-		const player = this.state.players.get(playerId)
-		if (!player) return false
-
-		const localTeam = player.readState("team")
-
-		if (building.readState("team") === localTeam) {
-			this.selectedOrigins.set(playerId, buildingId)
-			building.select(localTeam)
-			return true
-		}
-
-		return false
-	}
-
 	// Sends troops from selected origin building to the specified target for a player
-	public sendTroops(playerId: string, targetId: string) {
-		console.log("ACZ: targetId")
+	public sendTroops(playerId: string, originId: string, targetId: string) {
 
-		const selectedOriginBuildingId = this.selectedOrigins.get(playerId)
-		if (!selectedOriginBuildingId
-			|| selectedOriginBuildingId === targetId) return
+		if (!originId
+			|| originId === targetId) return
 
 		this.state.battlefield.sendTroops(
-			selectedOriginBuildingId,
+			originId,
 			targetId,
 			playerId
 		)
-		this.selectedOrigins.set(playerId, null)
-		this.resetSelection(playerId)
 	}
 
 	/**
@@ -268,14 +233,17 @@ soldierCount: number }[]): Team | null {
 
 		const serializedBattlefield = battlefield.serialize()
 
+		const ticker = this.readState("ticker").getTick()
+
 		return {
 			state,
-			winner,
+			ticker,
 			mapPlayers,
 			players: simplePlyerInfo,
 			soldiersPerTeam,
 			battlefield: serializedBattlefield,
-			gameResult
+			winner,
+			gameResult,
 		}
 	}
 

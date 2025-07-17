@@ -42,19 +42,9 @@ export class GameAdapter {
 			socket.emit("game:localPlayer", this.game.getPlayerById(playerId))
 		})
 
-		socket.on("game:selectOrigin", (buildingId: string, callback) => {
-			const selected = this.game.selectOrigin(playerId, buildingId)
-
-			callback?.(selected)
-		})
-
-		socket.on("game:resetSelection", () => {
-			this.game.resetSelection(playerId)
-		})
-
-		socket.on("game:sendTroop", (targetId: string) => {
-			console.log("ACZ selected:", targetId)
-			this.game.sendTroops(playerId, targetId)
+		socket.on("game:sendTroop", (originId:string, targetId: string) => {
+			console.log("ACZ selected:", originId, "->", targetId)
+			this.game.sendTroops(playerId, originId, targetId)
 		})
 
 		socket.on("game:upgrade", (buildingId: string) => {

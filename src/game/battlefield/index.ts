@@ -188,28 +188,11 @@ export class Battlefield implements IBattlefield {
 	}
 
 	/**
-	 * Deselects all buildings for the given player's team.
-	 * @param playerId ID of the player whose buildings to deselect.
-	 */
-	public deselectAllByPlayer(playerId: string): void {
-		PlayerOps.deselectAllByPlayer(this.state, playerId)
-	}
-
-	/**
 	 * Adds a building (Barrack or Tower) to the battlefield.
 	 * @param building Building to add.
 	 */
 	public addBuilding(building: Barrack | Tower): void {
 		this.state.buildings.push(building)
-	}
-
-	/**
-	 * Selects a building by its ID for the given player.
-	 * @param buildingId ID of the building to select.
-	 * @param playerId ID of the player selecting the building.
-	 */
-	public selectBuildingById(buildingId: string, playerId: string): void {
-		PlayerOps.selectBuildingById(this.state, buildingId, playerId)
 	}
 
 	/**

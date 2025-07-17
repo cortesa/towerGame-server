@@ -34,9 +34,7 @@ export interface IBattlefield {
 	serialize(): BattlefieldSerializedState;
 	update(deltaTime: number): BattleEvent[];
 	addPlayer(player: IPlayer): void;
-	deselectAllByPlayer(playerId: string): void;
 	addBuilding(building: IBuilding): void;
-	selectBuildingById(buildingId: string, playerId: string): void;
 	sendTroops(fromId: string, toId: string, byPlayerId: string): void;
 	getBuildingById(id: string): IBuilding | null;
 }

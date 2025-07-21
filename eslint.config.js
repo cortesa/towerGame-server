@@ -64,7 +64,6 @@ export default tseslint.config(
         {
           "code": 90,
           "tabWidth": 2,
-          // "ignoreStrings": true,
           "ignoreComments": true,
           "ignoreTemplateLiterals": true
         }

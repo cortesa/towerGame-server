@@ -1,7 +1,7 @@
 import type { BuildingConfig, BaseBuildingState } from "@/types"
 
 import { Building } from "./building"
-import { MAX_SOLDIERS_PRODUCTION, SOLDIERS_PRODUCTION_COOLDOWN } from "./constants"
+import { BARRACKS_PRODUCTION_CAP, BARRACKS_PRODUCTION_COOLDOWN } from "./constants"
 
 /**
  * Represents a Barrack building that can produce soldiers over time.
@@ -46,11 +46,11 @@ export class Barrack extends Building<BaseBuildingState> {
 	public buildingAction(): void {
 		if (this.soldierProductionCooldownTime > 0) return
 		const newSoldierCount = this.readState("soldierCount") + 1
-		if (newSoldierCount > MAX_SOLDIERS_PRODUCTION) return
+		if (newSoldierCount > BARRACKS_PRODUCTION_CAP) return
 
 		this.setState({ soldierCount: newSoldierCount })
 		const level = this.readState("level")
-		this.soldierProductionCooldownTime = SOLDIERS_PRODUCTION_COOLDOWN[ level ]
+		this.soldierProductionCooldownTime = BARRACKS_PRODUCTION_COOLDOWN[ level ]
 	}
 
 }

@@ -11,9 +11,9 @@ import type {
 
 import { calculateLevelFromSoldiers, evaluateUpgradeOption } from "./utils"
 import {
-	BUILDING_UPGRADE_THRESHOLDS,
+	BUILDING_UPGRADE_ETA,
 	METERS_TO_PX,
-	UPGRADE_COOLDOWN_TIME
+	BUILDING_UPGRADE_DURATION
 } from "./constants"
 
 export abstract class Building<
@@ -64,7 +64,7 @@ export abstract class Building<
 	constructor(buildingType: BuildingType, config: BuildingConfig) {
 		this.id = crypto.randomUUID()
 		this.buildingType = buildingType
-		this.upgradeCooldownTime = UPGRADE_COOLDOWN_TIME
+		this.upgradeCooldownTime = BUILDING_UPGRADE_DURATION
 		const initialSoldiers = config.initialSoldiers ?? 0
 		const level = calculateLevelFromSoldiers(initialSoldiers, config.initialLevel)
 		// Default to neutral team if no team is specified
@@ -199,12 +199,12 @@ export abstract class Building<
 		if (buildingTeam !== playerTeam || !canUpgrade || level === 3) return
 
 		this.setState({
-			soldierCount: this.readState("soldierCount") - BUILDING_UPGRADE_THRESHOLDS[ level ],
+			soldierCount: this.readState("soldierCount") - BUILDING_UPGRADE_ETA[ level ],
 			isUpgrading: true,
 			canUpgrade: false
 		} as Partial<BuildingState>)
 
-		this.upgradeCooldownTime = UPGRADE_COOLDOWN_TIME
+		this.upgradeCooldownTime = BUILDING_UPGRADE_DURATION
 	}
 
 	/**

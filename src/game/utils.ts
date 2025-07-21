@@ -1,14 +1,14 @@
 import type { BaseBuildingState, BuildingLevel, Hitbox } from "@/types"
 
-import { BUILDING_UPGRADE_THRESHOLDS } from "./constants"
+import { BUILDING_UPGRADE_ETA } from "./constants"
 
 export function calculateLevelFromSoldiers(
 	soldiers: number,
 	initialLevel?: BuildingLevel
 ): BuildingLevel {
-	for (const levelStr in BUILDING_UPGRADE_THRESHOLDS) {
+	for (const levelStr in BUILDING_UPGRADE_ETA) {
 		const level = Number(levelStr) as BuildingLevel
-		if (soldiers < BUILDING_UPGRADE_THRESHOLDS[ level ]) {
+		if (soldiers < BUILDING_UPGRADE_ETA[ level ]) {
 			return level
 		}
 	}
@@ -31,7 +31,7 @@ export function evaluateUpgradeOption(
 		return
 	}
 
-	const threshold = BUILDING_UPGRADE_THRESHOLDS[ level ]
+	const threshold = BUILDING_UPGRADE_ETA[ level ]
 	setState({ canUpgrade: state[ "soldierCount" ] >= threshold })
 }
 

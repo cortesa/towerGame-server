@@ -1,5 +1,14 @@
 import type { Position, Team, TilePosition, Hitbox } from "./basic"
 
+export const BuildingStatus = {
+	IDLE: "idle",
+	ACTIVE: "active",
+	UPGRADING: "upgrading",
+	CHANGING: "changing",
+	REPLACING: "replacing"
+} as const
+
+export type BuildingStatus = typeof BuildingStatus[keyof typeof BuildingStatus]
 export type BuildingLevel = 0 | 1 | 2 | 3;
 export type TroopArrivalOutcome = "reinforced" | "defended" | "conquered";
 export type BuildingType = "barrack" | "tower" | "factory";
@@ -22,16 +31,14 @@ export interface BuildingConfig {
 }
 
 export interface BaseBuildingState {
+	status: BuildingStatus;
 	position: Position;
 	level: BuildingLevel;
 	soldierCount: number;
 	team: Team;
-	isUpgrading: boolean;
-	canUpgrade: boolean;
-	isChangingType: boolean;
-	canChangeType: boolean;
-	isActive: boolean;
 	hitbox: Hitbox;
+	canUpgrade: boolean;
+	canChange: boolean;
 }
 
 export interface TowerState extends BaseBuildingState {
@@ -42,13 +49,13 @@ export interface TowerState extends BaseBuildingState {
 export interface BaseBuildingSerializedState {
 	id: string;
 	type: BuildingType;
-	team: Team;
+	status: BuildingStatus;
 	position: Position;
 	level: BuildingLevel;
 	soldierCount: number;
-	isActive: boolean;
-	isUpgrading: boolean;
+	team: Team;
 	canUpgrade: boolean;
+	canChange: boolean;
 }
 
 export type BuildingSerializedState<

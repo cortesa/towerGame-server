@@ -135,6 +135,9 @@ export class Game {
 	public tryUpgrade(playerId: string, buildingId: string): void {
 		const building = this.readState("battlefield").getBuildingById(buildingId)
 		if (!building) return
+
+		console.log("ACZ: ", building);
+		
 		
 		const player = this.state.players.get(playerId)
 		if (!player) return

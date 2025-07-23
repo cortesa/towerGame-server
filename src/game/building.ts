@@ -1,13 +1,15 @@
-import type {
-	BaseBuildingState,
-	BuildingType,
-	Team,
-	TroopArrivalOutcome,
-	BuildingConfig,
-	BuildingLevel,
-	IBuilding,
-	BuildingSerializedState
-} from "@/types"
+import {
+	type BaseBuildingState,
+	type BuildingType,
+	type Team,
+	type TroopArrivalOutcome,
+	type BuildingConfig,
+	type BuildingLevel,
+	type IBuilding,
+	type BuildingSerializedState,
+	BuildingStatus
+} from "../types"
+
 
 import { calculateLevelFromSoldiers, evaluateUpgradeOption } from "./utils"
 import {
@@ -74,13 +76,11 @@ export abstract class Building<
 			y: config.y
 		}
 		this.state = {
+			status: BuildingStatus.IDLE,
 			position,
 			level,
 			soldierCount: initialSoldiers,
 			team,
-			isUpgrading: false,
-			canUpgrade: false,
-			isActive: false,
 			hitbox: {
 				x: (config.x ?? 0) - (METERS_TO_PX / 2),
 				y: (config.y ?? 0) - (METERS_TO_PX / 2),
@@ -88,7 +88,9 @@ export abstract class Building<
 				height: METERS_TO_PX,
 				entityId: this.id,
 				entityType: this.buildingType
-			}
+			},
+			canUpgrade: false,
+			canChange: false
 		} as BuildingState
 	}
 
@@ -101,8 +103,7 @@ export abstract class Building<
 			const nextLevel = (this.readState("level") + 1) as BuildingLevel
 			this.setState({
 				level: nextLevel,
-				isUpgrading: false,
-				canUpgrade: false
+				status: BuildingStatus.IDLE
 			} as Partial<BuildingState>)
 			this.onUpgrade?.()
 		}
@@ -121,12 +122,12 @@ export abstract class Building<
 				patch: Partial<BaseBuildingState>
 			) => this.setState(patch as Partial<BuildingState>)
 		)
-
-		if (this.readState("isUpgrading")) {
+				
+		if (this.readState("status") === BuildingStatus.UPGRADING) {
 			this.handleUpgrade(deltaTime)
 		}
 
-		if (this.readState("isActive") && !this.readState("isUpgrading")) {
+		if (this.readState("status") === BuildingStatus.ACTIVE && this.readState("status") !== BuildingStatus.UPGRADING) {
 			this.buildingAction(level, ...args)
 		}
 	}
@@ -166,14 +167,14 @@ export abstract class Building<
 	public serialize(): BuildingSerializedState {
 		return {
 			id: this.id,
+			status: this.readState("status"),
 			type: this.buildingType,
 			team: this.readState("team"),
 			position: this.readState("position"),
 			level: this.readState("level"),
 			soldierCount: this.readState("soldierCount"),
-			isActive: this.readState("isActive"),
-			isUpgrading: this.readState("isUpgrading"),
-			canUpgrade: this.readState("canUpgrade")
+			canUpgrade: this.readState("canUpgrade"),
+			canChange: this.readState("canChange")
 		}
 	}
 
@@ -194,16 +195,21 @@ export abstract class Building<
 	public startUpgrade(playerTeam: Team) {
 		const buildingTeam = this.readState("team")
 		const level = this.readState("level")
-		const canUpgrade = this.readState("canUpgrade")
+		const status = this.readState("status")
+		
+		const canUpgrade =
+			this.readState("canUpgrade")
+			&& buildingTeam === playerTeam 
+			&&(status === BuildingStatus.IDLE || status === BuildingStatus.ACTIVE)
+			&& level !== 3
 
-		if (buildingTeam !== playerTeam || !canUpgrade || level === 3) return
-
+		if (!canUpgrade) return
+		
 		this.setState({
 			soldierCount: this.readState("soldierCount") - BUILDING_UPGRADE_ETA[ level ],
-			isUpgrading: true,
-			canUpgrade: false
+			status: BuildingStatus.UPGRADING
 		} as Partial<BuildingState>)
-		
+	
 		this.upgradeCooldownTime = BUILDING_UPGRADE_DURATION
 	}
 
@@ -235,15 +241,14 @@ export abstract class Building<
 		const survivors = currentSoldiers - attackingSoldiers
 
 		if (survivors >= 0) {
-			this.setState({ soldierCount: survivors } as Partial<BuildingState>)
+			this.setState({ soldierCount: survivors, status: BuildingStatus.IDLE } as Partial<BuildingState>)
 			this.onDefended?.()
 		} else {
 			this.setState({
 				team: attackingTeam,
 				soldierCount: Math.abs(survivors),
 				level: 0,
-				isUpgrading: false,
-				canUpgrade: false
+				status: BuildingStatus.IDLE
 			} as Partial<BuildingState>)
 			this.onConquered?.()
 			return "conquered"

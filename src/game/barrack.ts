@@ -1,5 +1,5 @@
-import type { BuildingConfig, BaseBuildingState } from "@/types"
 
+import { BaseBuildingState, BuildingConfig, BuildingStatus } from "../types"
 import { Building } from "./building"
 import { BARRACKS_PRODUCTION_CAP, BARRACKS_PRODUCTION_COOLDOWN } from "./constants"
 
@@ -16,7 +16,11 @@ export class Barrack extends Building<BaseBuildingState> {
    */
 	constructor(config: BuildingConfig) {
 		super("barrack", config)
-		this.setState({ isActive: (config.team || "neutral") !== "neutral" })
+		this.setState({ 
+			status: ((config.team || "neutral") !== "neutral")
+				? BuildingStatus.ACTIVE
+				: BuildingStatus.IDLE 
+		})
 	}
 
 	/**
@@ -31,12 +35,19 @@ export class Barrack extends Building<BaseBuildingState> {
 		)
 	}
 
+		/**
+	 * Called when the tower is upgraded.
+	 */
+	protected onUpgrade(): void {
+		this.setState({status: BuildingStatus.ACTIVE})
+	}
+
 	/**
    * Handles actions to perform when the barrack is conquered.
    * Activates the barrack upon conquest.
    */
 	protected onConquered(): void {
-		this.setState({ isActive: true })
+		this.setState({ status: BuildingStatus.ACTIVE })
 	}
 
 	/**

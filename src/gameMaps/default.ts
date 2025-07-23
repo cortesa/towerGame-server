@@ -84,7 +84,7 @@ export const INITIAL_TOWERS: BuildingConfig[] = [
 		buildingType: "tower",
 		tx: 5,
 		ty: 4,
-		initialSoldiers: 5,
+		initialSoldiers: 36,
 		team: "red",
 		blockedArea: [{
 			tx: 5,

@@ -1,5 +1,5 @@
 import type { Troop } from "./troop"
-import type { BuildingConfig, Hitbox, IBuilding, BuildingSerializedState, TowerState } from "@/types"
+import { type BuildingConfig, type Hitbox, type IBuilding, type BuildingSerializedState, type TowerState, BuildingStatus } from "../types"
 
 import { Building } from "./building"
 import { TOWER_ATTACK_COOLDOWN, TOWER_ATTACK_RANGE } from "./constants"
@@ -25,6 +25,7 @@ export class Tower extends Building<TowerState> implements IBuilding<TowerState>
 	 */
 	constructor(config: BuildingConfig) {
 		super("tower", config)
+		this.setState({status: BuildingStatus.IDLE})
 		this.recalculateAttackZone()
 	}
 
@@ -62,7 +63,11 @@ export class Tower extends Building<TowerState> implements IBuilding<TowerState>
 		this.attackCooldownTime = Math.max(0, this.attackCooldownTime - deltaTime)
 		const inRange = this.findTroopsInRange(troops)
 		this.closestTroopInRange = inRange[ 0 ] ?? null
-		this.setState({ isActive: this.closestTroopInRange !== null })
+		this.setState({
+			status: (this.closestTroopInRange !== null)
+				?	BuildingStatus.ACTIVE
+				: this.readState("status")
+		})
 	}
 
 	/**

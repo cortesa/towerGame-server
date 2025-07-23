@@ -1,6 +1,6 @@
 import type { Server, Socket } from "socket.io"
 import type { Game } from "./game"
-import type { Team } from "@/types"
+import type { BuildingType, Team } from "@/types"
 
 interface GameRoomAdapterOptions {
 	roomId: string
@@ -43,12 +43,17 @@ export class GameAdapter {
 		})
 
 		socket.on("game:sendTroop", (originId:string, targetId: string) => {
-			console.log("ACZ selected:", originId, "->", targetId)
+			console.log("ACZ sendTroop:", originId, "->", targetId)
 			this.game.sendTroops(playerId, originId, targetId)
 		})
-
+		
 		socket.on("game:upgrade", (buildingId: string) => {
 			this.game.tryUpgrade(playerId, buildingId)
+		})
+		
+		socket.on("game:changeBuildingType", (buildingId: string, newType: BuildingType) => {
+			console.log("ACZ change to:", newType)
+			this.game.tryChangeBuildingType(playerId, buildingId, newType)
 		})
 
 		socket.on("game:setPlayerRatio", (ratio: number) => {

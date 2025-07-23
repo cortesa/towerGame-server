@@ -2,7 +2,12 @@ import type { Position, Team, TilePosition, Hitbox } from "./basic"
 
 export type BuildingLevel = 0 | 1 | 2 | 3;
 export type TroopArrivalOutcome = "reinforced" | "defended" | "conquered";
-export type BuildingType = "barrack" | "tower";
+export type BuildingType = "barrack" | "tower" | "factory";
+
+export type BuildingTypeChangeData = {
+	soldiersRequired: number;
+	duration: number; // en segundos
+};
 
 export interface BuildingConfig {
 	buildingType: BuildingType;
@@ -23,6 +28,8 @@ export interface BaseBuildingState {
 	team: Team;
 	isUpgrading: boolean;
 	canUpgrade: boolean;
+	isChangingType: boolean;
+	canChangeType: boolean;
 	isActive: boolean;
 	hitbox: Hitbox;
 }
@@ -58,5 +65,6 @@ export interface IBuilding<State extends BaseBuildingState = BaseBuildingState> 
 	update(deltaTime: number, ...args: unknown[]): void;
 	updateSoldierCount(soldierCount: number): void;
 	startUpgrade(playerTeam: Team): void;
+	startTypeChange(newType: BuildingType): void;
 	onTroopArrival(attackingTeam: Team, attackingSoldiers: number): TroopArrivalOutcome;
 }

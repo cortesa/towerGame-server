@@ -203,8 +203,12 @@ export abstract class Building<
 			isUpgrading: true,
 			canUpgrade: false
 		} as Partial<BuildingState>)
-
+		
 		this.upgradeCooldownTime = BUILDING_UPGRADE_DURATION
+	}
+
+	public startTypeChange(newType: BuildingType) {
+		console.log("ACZ: startTypeChange", newType)
 	}
 
 	/**

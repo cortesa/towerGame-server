@@ -14,7 +14,6 @@ export class Game {
 		mapPlayers: 0,
 		ticker: new Ticker(),
 		soldiersPerTeam: [],
-		gameResult: { status: "waiting" }
 	}
 
 	private listeners: Set<() => void> = new Set()
@@ -83,7 +82,6 @@ export class Game {
 		if (this.readState("players").size === this.state.mapPlayers) {
 			this.setState({
 				state: "ongoing",
-				gameResult: { status: "ongoing" }
 			})
 			this.state.ticker.start()
 		}
@@ -135,16 +133,30 @@ export class Game {
 
 	// Attempts to upgrade a building if it belongs to the player's team
 	public tryUpgrade(playerId: string, buildingId: string): void {
-		const building = this.state.battlefield.getBuildingById(buildingId)
+		const building = this.readState("battlefield").getBuildingById(buildingId)
+		if (!building) return
+		
+		const player = this.state.players.get(playerId)
+		if (!player) return
+		
+		const localTeam = player.readState("team")
+		
+		if (building.readState("team") === localTeam) {
+			building.startUpgrade(localTeam)
+		}
+	}
+	
+	// Attempts to change the building type if it belongs to the player's team
+	public tryChangeBuildingType(playerId: string, buildingId: string, newType: import("@/types").BuildingType): void {
+		const building = this.readState("battlefield").getBuildingById(buildingId)
 		if (!building) return
 
 		const player = this.state.players.get(playerId)
 		if (!player) return
-
 		const localTeam = player.readState("team")
 
 		if (building.readState("team") === localTeam) {
-			building.startUpgrade(localTeam)
+			building.startTypeChange(newType)
 		}
 	}
 
@@ -177,7 +189,6 @@ soldierCount: number }[]): Team | null {
 				console.log(`[Defeat] Team '${playerTeam}' has no soldiers left!`)
 				this.setState({
 					state: "ended",
-					gameResult: { status: "ended" }
 				})
 				continue
 			}
@@ -188,10 +199,6 @@ soldierCount: number }[]): Team | null {
 				this.setState({
 					state: "ended",
 					winner: playerTeam as Team,
-					gameResult: {
-						status: "ended",
-						winner: playerTeam as Team
-					}
 				})
 				break
 			}
@@ -200,7 +207,6 @@ soldierCount: number }[]): Team | null {
 		if (!winner) {
 			this.setState({
 				state: "ongoing",
-				gameResult: { status: "ongoing" }
 			})
 		} else {
 			this.readState("ticker").stop()
@@ -216,7 +222,6 @@ soldierCount: number }[]): Team | null {
 			mapPlayers,
 			players,
 			soldiersPerTeam,
-			gameResult,
 			battlefield
 		} = this.readState()
 
@@ -243,7 +248,6 @@ soldierCount: number }[]): Team | null {
 			soldiersPerTeam,
 			battlefield: serializedBattlefield,
 			winner,
-			gameResult,
 		}
 	}
 

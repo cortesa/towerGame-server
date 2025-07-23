@@ -1,4 +1,4 @@
-import type { BuildingSerializedState, IBuilding } from "./building"
+import type { BuildingSerializedState, BuildingType, IBuilding } from "./building"
 import type { ITroop, TroopSerializedState } from "./troop"
 import type { IProjectile, ProjectileSerializedState } from "./projectile"
 import type { IPlayer } from "./player"

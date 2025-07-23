@@ -14,8 +14,4 @@ export type GameState = {
 			team: string,
 			soldierCount: number
 		}[];
-		gameResult: {
-			status: "waiting" | "ongoing" | "ended",
-			winner?: Team
-		};
 	}

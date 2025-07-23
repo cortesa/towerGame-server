@@ -16,7 +16,7 @@ export type Hitbox = {
 	width: number;
 	height: number;
 	entityId: string;
-	entityType: "troop" | "projectile" | "barrack" | "tower";
+	entityType: "troop" | "projectile" | "barrack" | "tower" | "factory";
 };
 
 export type Tile = {

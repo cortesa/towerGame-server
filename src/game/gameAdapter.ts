@@ -17,7 +17,7 @@ export class GameAdapter {
 	constructor({
 		io,
 		roomId,
-		game,
+		game
 	}: GameRoomAdapterOptions) {
 		this.io = io
 		this.roomId = roomId
@@ -42,18 +42,18 @@ export class GameAdapter {
 			socket.emit("game:localPlayer", this.game.getPlayerById(playerId))
 		})
 
-		socket.on("game:sendTroop", (originId:string, targetId: string) => {
+		socket.on("game:sendTroop", (originId: string, targetId: string) => {
 			console.log("ACZ sendTroop:", originId, "->", targetId)
 			this.game.sendTroops(playerId, originId, targetId)
 		})
-		
+
 		socket.on("game:upgrade", (buildingId: string) => {
 			this.game.tryUpgrade(playerId, buildingId)
 		})
-		
+
 		socket.on("game:changeBuildingType", (buildingId: string, newType: BuildingType) => {
 			console.log("ACZ change to:", newType)
-			this.game.tryChangeBuildingType(playerId, buildingId, newType)
+			this.game.tryReplaceBuildingType(playerId, buildingId, newType)
 		})
 
 		socket.on("game:setPlayerRatio", (ratio: number) => {

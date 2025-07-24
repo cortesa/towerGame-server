@@ -1,6 +1,16 @@
-
+import {
+	type BattleEvent,
+	type BattlefieldState,
+	type Hitbox,
+	type IBuilding,
+	type IProjectile,
+	type ITroop,
+	BuildingStatus
+} from "../../types"
+import { Projectile } from "../projectile"
 import { checkAndHandleCollision } from "../collision"
-import { BattleEvent, BattlefieldState, Hitbox, IBuilding, IProjectile, ITroop } from "@/types";
+import { Tower } from "../tower"
+import { Barrack } from "../barrack"
 
 export function updateEntities(
 	state: BattlefieldState,
@@ -9,16 +19,43 @@ export function updateEntities(
 	newState: Partial<BattlefieldState>;
 	events: BattleEvent[];
 } {
+
+	// Variable initialization
 	const events: BattleEvent[] = []
 	const count: Record<string, number> = Object.fromEntries(
 		state.soldiersPerTeam.map(({ team }) => [ team, 0 ])
 	)
 	const troops = [ ...state.troops ]
 	const projectiles = [ ...state.projectiles ]
-	const trashCan: (ITroop | IProjectile)[] = []
+	const trashCan: (ITroop | IProjectile | IBuilding)[] = []
 
-	// 1. Update all buildings and accumulate soldier counts
+	// 1. Update all buildings, accumulate soldier counts and swap building
 	for (const building of state.buildings) {
+		if (building.readState("status") === BuildingStatus.PENDING_SWAP) {
+			const swapCfg = building.getNextTypeCfg()
+			let newBuilding = null
+			switch (swapCfg.buildingType) {
+				case "barrack":
+					newBuilding = new Barrack(swapCfg)
+					break
+				case "tower":
+					newBuilding = new Tower(swapCfg)
+					newBuilding.onProjectileCreated = (projectile: Projectile) => {
+						state.projectiles.push(projectile)
+					}
+					break
+				case "factory":
+					newBuilding = null
+					break
+				default:
+					newBuilding = null
+					break
+			}
+
+			if (newBuilding) state.buildings.push(newBuilding)
+			trashCan.push(building)
+		}
+
 		building.update(deltaTime, troops)
 		const { team, soldierCount } = building.readState()
 		count[ team ] = (count[ team ] || 0) + soldierCount
@@ -68,6 +105,7 @@ entity: ITroop | IProjectile | IBuilding }[] = [
 	// 6. Return updated state and events
 	return {
 		newState: {
+			buildings: state.buildings.filter(b => !trashCan.includes(b)),
 			troops: state.troops.filter(t => !trashCan.includes(t)),
 			projectiles: state.projectiles.filter(p => !trashCan.includes(p)),
 			soldiersPerTeam: Object.entries(count).map(([ team, soldierCount ]) => ({

@@ -9,13 +9,12 @@ import {
 	type BuildingSerializedState,
 	BuildingStatus
 } from "../types"
-
-
 import { calculateLevelFromSoldiers, evaluateUpgradeOption } from "./utils"
 import {
 	BUILDING_UPGRADE_ETA,
 	METERS_TO_PX,
-	BUILDING_UPGRADE_DURATION
+	BUILDING_UPGRADE_DURATION,
+	BUILDING_CONVERT_DATA
 } from "./constants"
 
 export abstract class Building<
@@ -25,6 +24,8 @@ export abstract class Building<
 	public readonly buildingType: BuildingType
 	private state: BuildingState
 	private upgradeCooldownTime: number
+	private convertCooldownTime: number
+	private nextType: BuildingType | null = null
 
 	/**
 	 * Abstract method representing the main action of the building.
@@ -46,6 +47,12 @@ export abstract class Building<
 	protected onUpgrade?(): void;
 
 	/**
+	 * Optional hook called when the building finishes converting.
+	 * Subclasses can override this to implement custom behavior on upgrade completion.
+	 */
+	protected onConvert?(): void;
+
+	/**
 	 * Optional hook called when the building is conquered by an enemy team.
 	 * Subclasses can override this to implement custom behavior on conquest.
 	 */
@@ -63,12 +70,30 @@ export abstract class Building<
 	 */
 	protected onReinforced?(): void;
 
+	public getNextTypeCfg(): BuildingConfig {
+		return {
+			buildingType: this.nextType || this.buildingType,
+			tx: 0,
+			ty: 0,
+			x: this.readState("position").x,
+			y: this.readState("position").y,
+			team: this.readState("team"),
+			initialSoldiers: this.readState("soldierCount"),
+			initialLevel: 0,
+			blockedArea: [],
+			swapped: true
+		}
+	}
+
 	constructor(buildingType: BuildingType, config: BuildingConfig) {
 		this.id = crypto.randomUUID()
 		this.buildingType = buildingType
 		this.upgradeCooldownTime = BUILDING_UPGRADE_DURATION
+		this.convertCooldownTime = BUILDING_CONVERT_DATA.duration
 		const initialSoldiers = config.initialSoldiers ?? 0
-		const level = calculateLevelFromSoldiers(initialSoldiers, config.initialLevel)
+		const level = config.swapped
+			? config.initialLevel
+			: calculateLevelFromSoldiers(initialSoldiers, config.initialLevel)
 		// Default to neutral team if no team is specified
 		const team: Team = config.team ?? "neutral"
 		const position = {
@@ -109,6 +134,17 @@ export abstract class Building<
 		}
 	}
 
+	private handleConverting(deltatime: number): void {
+		this.convertCooldownTime -= deltatime
+
+		if (this.convertCooldownTime <= 0) {
+			console.log("ACZ:", "CONVERTING FINISHED")
+
+			this.setState({ status: BuildingStatus.PENDING_SWAP } as Partial<BuildingState>)
+			this.onConvert?.()
+		}
+	}
+
 	/**
 	 * Final method. Should not be overridden in subclasses.
 	 * Handles the building update lifecycle by calling `onUpdate` and conditionally `buildingAction`.
@@ -122,12 +158,18 @@ export abstract class Building<
 				patch: Partial<BaseBuildingState>
 			) => this.setState(patch as Partial<BuildingState>)
 		)
-				
+
 		if (this.readState("status") === BuildingStatus.UPGRADING) {
 			this.handleUpgrade(deltaTime)
 		}
 
-		if (this.readState("status") === BuildingStatus.ACTIVE && this.readState("status") !== BuildingStatus.UPGRADING) {
+		if (this.readState("status") === BuildingStatus.CONVERTING) {
+			this.handleConverting(deltaTime)
+		}
+
+		if (this.readState("status") === BuildingStatus.ACTIVE
+			&& this.readState("status") !== BuildingStatus.UPGRADING
+			&& this.readState("status") !== BuildingStatus.CONVERTING) {
 			this.buildingAction(level, ...args)
 		}
 	}
@@ -186,7 +228,6 @@ export abstract class Building<
 		this.setState({ soldierCount } as Partial<BuildingState>)
 	}
 
-
 	/**
 	 * Initiates the upgrade process if the building belongs to the given team and meets the requirements.
 	 * Deducts the soldier cost and sets the building as upgrading.
@@ -194,27 +235,35 @@ export abstract class Building<
 	 */
 	public startUpgrade(playerTeam: Team) {
 		const buildingTeam = this.readState("team")
-		const level = this.readState("level")
 		const status = this.readState("status")
-		
+		const level = this.readState("level")
+
 		const canUpgrade =
-			this.readState("canUpgrade")
-			&& buildingTeam === playerTeam 
-			&&(status === BuildingStatus.IDLE || status === BuildingStatus.ACTIVE)
-			&& level !== 3
+		this.readState("canUpgrade")
+		&& buildingTeam === playerTeam
+		&& (status === BuildingStatus.IDLE || status === BuildingStatus.ACTIVE)
+		&& level !== 3
 
 		if (!canUpgrade) return
-		
+
 		this.setState({
 			soldierCount: this.readState("soldierCount") - BUILDING_UPGRADE_ETA[ level ],
 			status: BuildingStatus.UPGRADING
 		} as Partial<BuildingState>)
-	
+
 		this.upgradeCooldownTime = BUILDING_UPGRADE_DURATION
 	}
 
-	public startTypeChange(newType: BuildingType) {
-		console.log("ACZ: startTypeChange", newType)
+	public startConvertType(nextType: BuildingType) {
+		const currentSoldiers = this.readState("soldierCount")
+
+		if (currentSoldiers >= BUILDING_CONVERT_DATA.soldiersRequired) {
+			this.setState({
+				soldierCount: currentSoldiers - BUILDING_CONVERT_DATA.soldiersRequired,
+				status: BuildingStatus.CONVERTING
+			} as Partial<BuildingState>)
+			this.nextType = nextType
+		}
 	}
 
 	/**
@@ -241,7 +290,10 @@ export abstract class Building<
 		const survivors = currentSoldiers - attackingSoldiers
 
 		if (survivors >= 0) {
-			this.setState({ soldierCount: survivors, status: BuildingStatus.IDLE } as Partial<BuildingState>)
+			this.setState({
+				soldierCount: survivors,
+				status: BuildingStatus.IDLE
+			} as Partial<BuildingState>)
 			this.onDefended?.()
 		} else {
 			this.setState({

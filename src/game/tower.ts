@@ -1,6 +1,13 @@
 import type { Troop } from "./troop"
-import { type BuildingConfig, type Hitbox, type IBuilding, type BuildingSerializedState, type TowerState, BuildingStatus } from "../types"
 
+import {
+	type BuildingConfig,
+	type Hitbox,
+	type IBuilding,
+	type BuildingSerializedState,
+	type TowerState,
+	BuildingStatus
+} from "../types"
 import { Building } from "./building"
 import { TOWER_ATTACK_COOLDOWN, TOWER_ATTACK_RANGE } from "./constants"
 import { Projectile } from "./projectile"
@@ -25,7 +32,7 @@ export class Tower extends Building<TowerState> implements IBuilding<TowerState>
 	 */
 	constructor(config: BuildingConfig) {
 		super("tower", config)
-		this.setState({status: BuildingStatus.IDLE})
+		this.setState({ status: BuildingStatus.IDLE })
 		this.recalculateAttackZone()
 	}
 
@@ -60,14 +67,13 @@ export class Tower extends Building<TowerState> implements IBuilding<TowerState>
 	 * Called each frame to update the tower's state.
 	 */
 	protected onUpdate(deltaTime: number, troops: Troop[]): void {
+
 		this.attackCooldownTime = Math.max(0, this.attackCooldownTime - deltaTime)
 		const inRange = this.findTroopsInRange(troops)
 		this.closestTroopInRange = inRange[ 0 ] ?? null
-		this.setState({
-			status: (this.closestTroopInRange !== null)
-				?	BuildingStatus.ACTIVE
-				: this.readState("status")
-		})
+		if (this.closestTroopInRange) {
+			this.setState({ status: BuildingStatus.ACTIVE })
+		}
 	}
 
 	/**
@@ -88,17 +94,19 @@ export class Tower extends Building<TowerState> implements IBuilding<TowerState>
 	 * Performs the tower's attack action if cooldown has elapsed and a target is available.
 	 */
 	public buildingAction(): void {
-		if (this.attackCooldownTime > 0 || !this.closestTroopInRange) return
+		if (this.attackCooldownTime > 0 || !this.closestTroopInRange) {
+			this.setState({ status: BuildingStatus.IDLE })
+			return
+		}
 
 		if (this.onProjectileCreated) {
 			const to = this.closestTroopInRange
 			const team = this.readState("team")
 			this.onProjectileCreated(new Projectile(this, to, team))
 		}
-
 		const level = this.readState("level")
 		this.attackCooldownTime =
-			TOWER_ATTACK_COOLDOWN[ level ]
+		TOWER_ATTACK_COOLDOWN[ level ]
 		this.closestTroopInRange = null
 	}
 

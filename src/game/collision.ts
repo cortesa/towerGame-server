@@ -2,6 +2,8 @@ import type { Hitbox, IBuilding, IProjectile, ITroop } from "@/types"
 
 import { intersects } from "./utils"
 
+type TrashCan = ITroop | IProjectile | IBuilding
+
 /**
  * Checks if two hitboxes intersect and, if so, delegates to the collision handler.
  */
@@ -10,7 +12,7 @@ export function checkAndHandleCollision(
 entity: ITroop | IProjectile | IBuilding },
 	b: { box: Hitbox;
 entity: ITroop | IProjectile | IBuilding },
-	trashCan: (ITroop | IProjectile)[]
+	trashCan: TrashCan[]
 ): void {
 	if (intersects(a.box, b.box)) {
 		handleCollision(a, b, trashCan)
@@ -26,7 +28,7 @@ function handleCollision(
 entity: ITroop | IProjectile | IBuilding },
 	b: { box: Hitbox;
 entity: ITroop | IProjectile | IBuilding },
-	trashCan: (ITroop | IProjectile)[]
+	trashCan: TrashCan[]
 ): void {
 	const typeA = a.box.entityType
 	const typeB = b.box.entityType

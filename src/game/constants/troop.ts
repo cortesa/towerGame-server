@@ -1,4 +1,4 @@
-import { BuildingLevel } from "@/types";
+import { BuildingLevel } from "@/types"
 
 export const TROOP_SPEED: Record<BuildingLevel, number> = {
 	0: 60, // in px/second

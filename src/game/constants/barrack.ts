@@ -1,4 +1,4 @@
-import { BuildingLevel } from "@/types";
+import { BuildingLevel } from "@/types"
 
 export const BARRACKS_PRODUCTION_CAP = 64 //soldiers
 

@@ -1,6 +1,13 @@
 import { svgPathProperties } from "svg-path-properties"
 
-import type { BuildingLevel, IBuilding, ITroop, Team, TroopSerializedState, TroopState } from "@/types"
+import type {
+	BuildingLevel,
+	IBuilding,
+	ITroop,
+	Team,
+	TroopSerializedState,
+	TroopState
+} from "@/types"
 
 import { TROOP_SPEED } from "./constants"
 

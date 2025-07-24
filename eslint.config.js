@@ -1,8 +1,5 @@
 import js from "@eslint/js"
 import globals from "globals"
-import react from "eslint-plugin-react"
-import reactHooks from "eslint-plugin-react-hooks"
-import reactRefresh from "eslint-plugin-react-refresh"
 import stylistic from "@stylistic/eslint-plugin"
 import eslintImport from "eslint-plugin-import"
 import newlineDestructuring from "eslint-plugin-newline-destructuring"
@@ -25,21 +22,13 @@ export default tseslint.config(
       ecmaVersion: 2020,
       globals: globals.browser,
     },
-    settings: {
-      react: {
-        version: "detect"
-      }
-    },
+    settings: {},
     plugins: {
-      "react": react,
-      "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
       "@stylistic": stylistic,
       "import": eslintImport,
       "newline-destructuring": newlineDestructuring
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
       "no-multiple-empty-lines": [
         "error",
         {
@@ -113,118 +102,6 @@ export default tseslint.config(
       ],
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-inferrable-types": "off",
-      "react/react-in-jsx-scope": "off",
-      "react/jsx-filename-extension": [
-        1,
-        {
-          "extensions": [
-            ".js",
-            ".jsx",
-            ".ts",
-            ".tsx"
-          ]
-        }
-      ],
-      "react/jsx-boolean-value": [
-        "error",
-        "never"
-      ],
-      "react/jsx-child-element-spacing": [
-        "error"
-      ],
-      "react/jsx-closing-bracket-location": [
-        "error",
-        {
-          "selfClosing": "line-aligned",
-          "nonEmpty": "after-props"
-        }
-      ],
-      "react/jsx-closing-tag-location": [
-        "error",
-        "line-aligned"
-      ],
-      "react/jsx-curly-brace-presence": [
-        "error",
-        {
-          "props": "never",
-          "propElementValues": "always",
-          "children": "ignore"
-        }
-      ],
-      "react/jsx-equals-spacing": [
-        "error",
-        "never"
-      ],
-      "react/jsx-first-prop-new-line": [
-        "error",
-        "multiline-multiprop"
-      ],
-      "react/jsx-max-props-per-line": [
-        "error",
-        {
-          "maximum": {
-            "single": 2,
-            "multi": 1
-          }
-        }
-      ],
-      "react/jsx-no-target-blank": [
-        "error",
-        {
-          "allowReferrer": false,
-          "enforceDynamicLinks": "always",
-          "warnOnSpreadAttributes": false,
-          "links": true,
-          "forms": false
-        }
-      ],
-      "react/jsx-one-expression-per-line": [
-        "error",
-        {
-          "allow": "non-jsx"
-        }
-      ],
-      "react/jsx-pascal-case": [
-        "error",
-        {
-          "allowAllCaps": true,
-          "allowNamespace": true,
-          "allowLeadingUnderscore": false
-        }
-      ],
-      "react/jsx-props-no-multi-spaces": [
-        "error"
-      ],
-      "react/jsx-props-no-spread-multi": [
-        "error"
-      ],
-      "react/jsx-tag-spacing": [
-        "error",
-        {
-          "closingSlash": "never",
-          "beforeSelfClosing": "never",
-          "afterOpening": "never",
-          "beforeClosing": "never"
-        }
-      ],
-      "react/jsx-wrap-multilines": [
-        "error",
-        {
-          "declaration": "parens",
-          "assignment": "parens",
-          "return": "parens",
-          "arrow": "parens",
-          "condition": "parens",
-          "logical": "parens",
-          "prop": "ignore"
-        }
-      ],
-      "react/no-array-index-key": [
-        "error"
-      ],
-      "react/no-object-type-as-default-prop": [
-        "error"
-      ],
       "@stylistic/comma-dangle": [
         "error",
         "never"
@@ -385,9 +262,6 @@ export default tseslint.config(
 						"ignoreTemplateLiterals": true
 					}
 				],
-				"react/jsx-max-props-per-line": [
-					"off"
-				]
 			}
 		}
 )

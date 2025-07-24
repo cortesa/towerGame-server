@@ -4,8 +4,8 @@ export const BuildingStatus = {
 	IDLE: "idle",
 	ACTIVE: "active",
 	UPGRADING: "upgrading",
-	CHANGING: "changing",
-	REPLACING: "replacing"
+	CONVERTING: "converting",
+	PENDING_SWAP: "pending-swap"
 } as const
 
 export type BuildingStatus = typeof BuildingStatus[keyof typeof BuildingStatus]
@@ -20,6 +20,7 @@ export type BuildingTypeChangeData = {
 
 export interface BuildingConfig {
 	buildingType: BuildingType;
+	blockedArea: TilePosition[];
 	tx: number;
 	ty: number;
 	x?: number;
@@ -27,7 +28,7 @@ export interface BuildingConfig {
 	team?: Team;
 	initialSoldiers?: number;
 	initialLevel?: BuildingLevel;
-	blockedArea: TilePosition[];
+	swapped?: boolean
 }
 
 export interface BaseBuildingState {
@@ -62,7 +63,6 @@ export type BuildingSerializedState<
 	Extra extends object = object
 > = BaseBuildingSerializedState & Extra;
 
-
 export interface IBuilding<State extends BaseBuildingState = BaseBuildingState> {
 	id: string;
 	buildingType: BuildingType;
@@ -72,6 +72,7 @@ export interface IBuilding<State extends BaseBuildingState = BaseBuildingState> 
 	update(deltaTime: number, ...args: unknown[]): void;
 	updateSoldierCount(soldierCount: number): void;
 	startUpgrade(playerTeam: Team): void;
-	startTypeChange(newType: BuildingType): void;
+	startConvertType(newType: BuildingType): void;
+	getNextTypeCfg(): BuildingConfig;
 	onTroopArrival(attackingTeam: Team, attackingSoldiers: number): TroopArrivalOutcome;
 }

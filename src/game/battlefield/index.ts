@@ -1,7 +1,17 @@
 import { svgPathProperties } from "svg-path-properties"
 
-
 import type { EventBus, GameEventMap } from "../eventBus"
+import {
+	BattleEvent,
+	BattlefieldSerializedState,
+	BattlefieldState,
+	GameMap,
+	IBattlefield,
+	IBuilding,
+	Position,
+	Tile,
+	TilePosition
+} from "@/types"
 
 import { Barrack } from "../barrack"
 import { Player } from "../player"
@@ -12,7 +22,6 @@ import * as entitiesOps from "./entitiesOps"
 import * as pathfindingOps from "./pathfindingOps"
 import * as PlayerOps from "./playerOps"
 import * as troopOps from "./troopOps"
-import { BattleEvent, BattlefieldSerializedState, BattlefieldState, GameMap, IBattlefield, IBuilding, Position, Tile, TilePosition } from "@/types"
 
 export class Battlefield implements IBattlefield {
 	/** Unique identifier for this battlefield instance */

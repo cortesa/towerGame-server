@@ -1,4 +1,4 @@
-import { BuildingLevel, BuildingTypeChangeData } from "@/types";
+import { BuildingLevel, BuildingTypeChangeData } from "@/types"
 
 export const BUILDING_UPGRADE_DURATION = 5
 
@@ -9,7 +9,7 @@ export const BUILDING_UPGRADE_ETA: Record<BuildingLevel, number> = {
 	3: Infinity
 }
 
-export const BUILDING_TYPE_CHANGE_DATA: BuildingTypeChangeData = {
-		soldiersRequired: 32,
-		duration: 10,
-};
+export const BUILDING_CONVERT_DATA: BuildingTypeChangeData = {
+	soldiersRequired: 32,
+	duration: 10
+}
